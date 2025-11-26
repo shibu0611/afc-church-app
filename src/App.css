@@ -6,7 +6,7 @@
   --text-color: #0b0b0b;
   --muted: #6b7280;
   --accent: #2563eb; /* blue accent for primary buttons/active */
-  --sidebar-bg: #ffffff; /* <-- changed to white */
+  --sidebar-bg: #0f1720; /* dark left bar on desktop */
   --card-shadow: 0 8px 18px rgba(12,20,30,0.06);
   --card-radius: 12px;
   --input-bg: #fff;
@@ -27,93 +27,125 @@ a{color:inherit}
 /* --- Header: logo + church name --- */
 .header-left{
   display:flex;
-  align-items:center;
-  gap:18px;
-  padding:18px 26px;
+  flex-direction:column;
+  gap:8px;
+  padding:12px 18px;
   background: var(--page-bg); /* white header */
   border-bottom: 1px solid var(--border);
 }
 
+/* inside header first row */
+.header-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
 /* Logo sizing - fixed and proportionate */
 .church-logo{
-  width:72px;
-  height:72px;
+  width:64px;
+  height:64px;
   object-fit:cover;
-  border-radius:8px;
+  border-radius:10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 /* Title area */
 .church-title h1{
   margin:0;
-  font-size:32px;
+  font-size:28px;
   line-height:1;
   font-weight:800;
   color:var(--text-color);
 }
 
 .church-title .tagline{
-  margin-top:6px;
+  margin-top:4px;
   color:var(--muted);
-  font-size:14px;
+  font-size:13px;
 }
+
+/* hamburger (mobile) */
+.hamburger{
+  margin-left:auto;
+  display:none; /* shown on mobile via media query */
+  background:transparent;
+  border:none;
+  width:46px;
+  height:42px;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  padding:6px;
+}
+.hamburger span{display:block;height:3px;background:#222;margin:4px 0;border-radius:2px;transition:all .18s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* mobile horizontal nav (under header) */
+.mobile-nav{display:none;gap:8px;padding:8px 0;overflow:auto}
+.mobile-pill{
+  display:inline-block;
+  white-space:nowrap;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:transparent;
+  cursor:pointer;
+  font-weight:600;
+}
+.mobile-pill.active{background:var(--accent);color:#fff;border-color:transparent}
 
 /* --- Layout --- */
 .app-body{display:flex;flex:1 1 auto;}
 
-/* Sidebar (white, black text) */
+/* Sidebar (desktop) */
 .side-menu{
   width:220px;
-  background: var(--sidebar-bg);      /* white sidebar */
-  color:var(--text-color);            /* black text */
+  background: var(--sidebar-bg);
+  color:#fff;
   padding:18px;
   min-height: calc(100vh - 110px);
   position:sticky;
   top:0;
-  border-right:1px solid #f1f3f6;     /* subtle separation */
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
-/* Sidebar menu buttons */
+/* show overlay class (when toggled on mobile) - we'll keep for accessibility */
+.side-menu.show-overlay{
+  z-index:9999;
+}
+
+/* Sidebar buttons */
 .side-menu button{
   display:block;
   width:100%;
   text-align:left;
-  padding:10px 14px;                 /* slightly smaller padding */
+  padding:12px 14px;
   border-radius:10px;
-  margin-bottom:10px;
+  margin-bottom:6px;
   border:none;
   background:transparent;
-  color:var(--text-color);           /* black text */
+  color:inherit;
   font-weight:600;
   cursor:pointer;
-  transition:all .12s ease;
-  box-shadow:none;
-  outline:none;
+  transition:all .12s;
 }
-
-.side-menu button:hover{
-  transform:translateY(-2px);
-  background:#f6f9ff;                /* soft hover */
-}
-
-/* Active element (keeps visible blue) */
+.side-menu button:hover{transform:translateY(-1px);opacity:0.95}
 .side-menu .active{
   background:var(--accent);
   color:#fff;
   box-shadow: 0 6px 16px rgba(37,99,235,0.18);
 }
 
-/* Small: collapse to horizontal on small screens */
-@media (max-width:980px){
-  .side-menu{position:static;width:100%;display:flex;gap:8px;overflow:auto;padding:12px}
-}
-
-/* Main content: leave room for sidebar */
+/* Main content */
 .main-content{
   flex:1;
-  padding:30px 48px;
-  margin-left:0; /* sidebar is separate */
-  background:var(--page-bg);
+  padding:28px 40px;
+  margin-left:0;
 }
 
 /* Page title */
@@ -122,22 +154,22 @@ a{color:inherit}
   font-size:28px;
   color:var(--text-color);
 }
+.muted{color:var(--muted);margin-top:6px}
 
 /* --- Dashboard summary cards --- */
 .dashboard-grid{
   display:flex;
-  gap:28px;
+  gap:22px;
   align-items:flex-start;
   margin-top:18px;
   flex-wrap:wrap;
 }
 
-/* Reduced card size to match your last request */
 .summary-card{
-  width:160px;          /* adjusted to be smaller than original */
-  min-height:90px;      /* smaller height */
+  width:180px;
+  min-height:90px;
   border-radius:var(--card-radius);
-  padding:14px;         /* slightly smaller padding */
+  padding:14px;
   box-shadow:var(--card-shadow);
   display:flex;
   flex-direction:column;
@@ -145,8 +177,8 @@ a{color:inherit}
 }
 
 .summary-card h3{
-  margin:0 0 6px 0;
-  font-size:16px;
+  margin:0 0 8px 0;
+  font-size:15px;
 }
 
 .summary-card .summary-value{
@@ -162,18 +194,17 @@ a{color:inherit}
 .summary-card.expense{background:var(--pastel-4)}
 .summary-card.balance{background:var(--pastel-5)}
 
-/* --- Forms / card layout for Members, Offerings, etc --- */
-.members-layout,
-.offerings-layout,
-.tithes-layout,
-.expenses-layout{
-  display:flex;
-  gap:28px;
-  align-items:flex-start;
-  flex-wrap:wrap;
+/* simple panel card used for other pages */
+.panel-card{
+  padding:16px;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:var(--card-shadow);
+  border:1px solid var(--border);
+  max-width:760px;
 }
 
-/* form card */
+/* --- Forms / card layout (kept simple) --- */
 .member-form,
 .offering-form,
 .tithe-form,
@@ -186,85 +217,69 @@ a{color:inherit}
   border: 1px solid var(--border);
 }
 
-/* list / table side */
-.member-list,
-.offering-list,
-.tithe-list,
-.expense-list{
-  flex:1;
-  min-width:420px;
-}
-
-/* form labels & inputs */
-label{display:block;margin-bottom:10px;color:var(--text-color);font-weight:600}
-label small{display:block;color:var(--muted);font-weight:400;margin-top:4px}
-
-input[type="text"],
-input[type="tel"],
-input[type="number"],
-input[type="date"],
-input[type="month"],
-select,
-textarea{
-  width:100%;
-  padding:11px 12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--input-bg);
-  font-size:14px;
-  color:var(--text-color);
-  outline:none;
-  margin-top:6px;
-}
-
-textarea{min-height:80px;resize:vertical}
-
-/* two-column rows */
-.row-two{display:flex;gap:12px}
-.row-two label{flex:1}
-
-/* gender row */
-.gender-row{margin:8px 0 14px;display:flex;gap:8px;align-items:center}
-
-/* buttons */
-.primary-btn{
-  background:var(--accent);
-  color:#fff;
-  padding:12px 16px;
-  border-radius:10px;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow: 0 8px 18px rgba(37,99,235,0.14);
-  margin-top:10px;
-}
-.secondary-btn{
-  background:transparent;
-  border:1px solid var(--border);
-  padding:10px 14px;
-  border-radius:10px;
-  margin-left:10px;
-  cursor:pointer;
-}
-
-/* list table */
-table{width:100%;border-collapse:collapse}
-table th, table td{padding:10px 8px;text-align:left;border-bottom:1px solid #f1f3f6}
-.table-actions{display:flex;gap:8px}
-.table-btn{padding:6px 10px;border-radius:8px;border:none;cursor:pointer}
-.table-btn.edit{background:#f3f7ff;color:var(--accent)}
-.table-btn.delete{background:#ffecec;color:#e02424}
-
 /* small empty states */
 p{color:var(--muted)}
 
 /* --- Responsive --- */
-@media (max-width:980px){
-  .member-form, .offering-form, .tithe-form, .expense-form{width:100%}
+@media (max-width: 980px){
+  .mobile-nav{display:flex}
+  .church-title h1{font-size:22px}
+  .church-logo{width:56px;height:56px}
   .main-content{padding:18px}
-  .header-left{padding:12px}
 }
 
-/* --- Small polish --- */
+/* MOBILE: change sidebar to top compact bar, allow horizontal pills */
+@media (max-width: 768px){
+  .hamburger{display:flex}
+  .mobile-nav{display:flex;gap:8px}
+
+  .side-menu{
+    /* collapse sidebar visually on mobile: keep hidden vertically */
+    position:fixed;
+    left:0;
+    top:0;
+    height:56px;
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    padding:8px;
+    gap:10px;
+    overflow-x:auto;
+    background:var(--page-bg);
+    color:var(--text-color);
+    border-right: none;
+    border-bottom:1px solid var(--border);
+    z-index:12;
+  }
+
+  .side-menu button{
+    min-width:110px;
+    padding:10px 12px;
+    margin:0 6px 0 0;
+    border-radius:10px;
+    background:transparent;
+    color:var(--text-color);
+    border:1px solid var(--border);
+  }
+
+  .side-menu .active{
+    background:var(--accent);
+    color:#fff;
+    border-color:transparent;
+    box-shadow: 0 6px 16px rgba(37,99,235,0.18);
+  }
+
+  /* make the main content sit below the compact nav */
+  .main-content{padding-top:16px; margin-top:56px}
+
+  /* reduce card sizes for mobile */
+  .dashboard-grid{gap:12px}
+  .summary-card{width:140px;min-height:70px;padding:10px}
+  .summary-card h3{font-size:14px}
+  .summary-card .summary-value{font-size:16px}
+}
+
+/* small polish */
 .primary-btn:active{transform:translateY(1px)}
 input:focus, select:focus, textarea:focus{box-shadow: 0 6px 18px rgba(37,99,235,0.06);border-color:#c6dafc}
