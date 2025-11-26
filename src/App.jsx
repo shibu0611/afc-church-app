@@ -1,121 +1,160 @@
 import React, { useState } from "react";
 import "./App.css";
-import logo from "../public/logo.jpg"; // keep public/logo.jpg
+
+const TABS = ["Dashboard", "Members", "Offerings", "Tithes", "Expenses", "Reports"];
+
+function Header({ mobileOpen, setMobileOpen }) {
+  return (
+    <header className="header-left">
+      <div className="header-inner">
+        <img src="/logo.jpg" alt="AFC logo" className="church-logo" />
+        <div className="church-title">
+          <h1>Apostolic Faith Church</h1>
+          <div className="tagline">Birth.Build.Bless</div>
+        </div>
+
+        {/* hamburger for very small screens; toggles mobile nav */}
+        <button
+          className="hamburger"
+          aria-label="Toggle menu"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+    </header>
+  );
+}
+
+function SideNav({ active, setActive }) {
+  return (
+    <nav className="side-menu" aria-label="Main navigation">
+      {TABS.map((t) => (
+        <button
+          key={t}
+          className={t === active ? "active" : ""}
+          onClick={() => setActive(t)}
+        >
+          {t}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function TopNav({ active, setActive }) {
+  return (
+    <div className="top-nav" role="tablist" aria-label="Top navigation">
+      {TABS.map((t) => (
+        <button
+          key={t}
+          className={`top-tab ${t === active ? "active" : ""}`}
+          onClick={() => setActive(t)}
+        >
+          {t}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function DashboardCards() {
+  // example values (replace with real data if you have)
+  const values = {
+    Members: 0,
+    Offerings: "₹ 0.00",
+    Tithes: "₹ 0.00",
+    Expenses: "₹ 0.00",
+    Balance: "₹ 0.00",
+  };
+
+  return (
+    <div>
+      <p className="summary-label">Monthly summary for {new Date().toLocaleString("default", { month: "long", year: "numeric" })}:</p>
+      <div className="dashboard-grid">
+        <div className="summary-card members">
+          <h3>Members</h3>
+          <div className="summary-value">{values.Members}</div>
+        </div>
+        <div className="summary-card income">
+          <h3>Offerings</h3>
+          <div className="summary-value">{values.Offerings}</div>
+        </div>
+        <div className="summary-card tithes">
+          <h3>Tithes</h3>
+          <div className="summary-value">{values.Tithes}</div>
+        </div>
+        <div className="summary-card expense">
+          <h3>Expenses</h3>
+          <div className="summary-value">{values.Expenses}</div>
+        </div>
+        <div className="summary-card balance">
+          <h3>Balance</h3>
+          <div className="summary-value">{values.Balance}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
-  const [active, setActive] = useState("dashboard");
+  const [active, setActive] = useState("Dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const navItems = [
-    { key: "dashboard", label: "Dashboard" },
-    { key: "members", label: "Members" },
-    { key: "offerings", label: "Offerings" },
-    { key: "tithes", label: "Tithes" },
-    { key: "expenses", label: "Expenses" },
-    { key: "reports", label: "Reports" },
-  ];
-
-  function handleNav(key) {
-    setActive(key);
-    setMobileOpen(false); // close mobile menu after selection
-  }
 
   return (
     <div className="app-root">
-      <header className="header-left">
-        <div className="header-row">
-          <img src={logo} alt="Apostolic Faith Church" className="church-logo" />
-          <div className="church-title">
-            <h1>Apostolic Faith Church</h1>
-            <div className="tagline">Birth.Build.Bless</div>
-          </div>
-
-          {/* Hamburger visible on mobile */}
-          <button
-            className={`hamburger ${mobileOpen ? "open" : ""}`}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-            title="Menu"
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-        </div>
-
-        {/* Mobile horizontal nav (small pills) */}
-        <nav className="mobile-nav">
-          {navItems.map((n) => (
-            <button
-              key={n.key}
-              className={`mobile-pill ${active === n.key ? "active" : ""}`}
-              onClick={() => handleNav(n.key)}
-            >
-              {n.label}
-            </button>
-          ))}
-        </nav>
-      </header>
+      <Header mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       <div className="app-body">
-        {/* Desktop / Tablet sidebar */}
-        <aside className={`side-menu ${mobileOpen ? "show-overlay" : ""}`}>
-          {navItems.map((n) => (
-            <button
-              key={n.key}
-              className={active === n.key ? "active" : ""}
-              onClick={() => handleNav(n.key)}
-            >
-              {n.label}
-            </button>
-          ))}
-        </aside>
+        {/* desktop sidebar (hidden on small screens) */}
+        <SideNav active={active} setActive={(t) => { setActive(t); setMobileOpen(false); }} />
 
+        {/* main area */}
         <main className="main-content">
-          <h2>
-            {navItems.find((i) => i.key === active)?.label || "Dashboard"}
-          </h2>
+          {/* top nav visible only on small screens */}
+          <div className={`top-nav-wrapper ${mobileOpen ? "open" : ""}`}>
+            <TopNav active={active} setActive={(t) => { setActive(t); setMobileOpen(false); }} />
+          </div>
 
-          {active === "dashboard" && (
+          <h2>{active}</h2>
+
+          {active === "Dashboard" && (
             <>
-              <p className="muted">Monthly summary for November 2025:</p>
-
-              <div className="dashboard-grid">
-                <div className="summary-card members">
-                  <h3>Members</h3>
-                  <div className="summary-value">0</div>
-                </div>
-
-                <div className="summary-card income">
-                  <h3>Offerings</h3>
-                  <div className="summary-value">₹ 0.00</div>
-                </div>
-
-                <div className="summary-card tithes">
-                  <h3>Tithes</h3>
-                  <div className="summary-value">₹ 0.00</div>
-                </div>
-
-                <div className="summary-card expense">
-                  <h3>Expenses</h3>
-                  <div className="summary-value">₹ 0.00</div>
-                </div>
-
-                <div className="summary-card balance">
-                  <h3>Balance</h3>
-                  <div className="summary-value">₹ 0.00</div>
-                </div>
-              </div>
+              <DashboardCards />
             </>
           )}
 
-          {active !== "dashboard" && (
-            <div className="panel">
-              <h3 style={{ marginTop: 8 }}>{navItems.find(i => i.key===active)?.label}</h3>
-              <div className="panel-card">
-                <p>This is the <strong>{active}</strong> page placeholder.</p>
-                <p>Replace with your forms / lists as before.</p>
-              </div>
+          {/* simple placeholders for other tabs */}
+          {active === "Members" && (
+            <div className="panel-card">
+              <h3>Add Member</h3>
+              <p style={{ color: "var(--muted)" }}>Member form goes here (keeps previous fields).</p>
+            </div>
+          )}
+
+          {active === "Offerings" && (
+            <div className="panel-card">
+              <h3>Add Offering</h3>
+            </div>
+          )}
+
+          {active === "Tithes" && (
+            <div className="panel-card">
+              <h3>Add Tithe</h3>
+            </div>
+          )}
+
+          {active === "Expenses" && (
+            <div className="panel-card">
+              <h3>Add Expense</h3>
+            </div>
+          )}
+
+          {active === "Reports" && (
+            <div className="panel-card">
+              <h3>Reports</h3>
             </div>
           )}
         </main>
