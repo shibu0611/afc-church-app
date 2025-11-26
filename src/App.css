@@ -13,8 +13,9 @@
   --pastel-5: #cff7fa;
 }
 
+/* Base */
 *{box-sizing:border-box}
-html,body,#root{height:100%;margin:0;background:var(--page-bg);color:var(--text-color);font-family: "Inter", system-ui, Arial, sans-serif}
+html,body,#root{height:100%;margin:0;background:var(--page-bg);color:var(--text-color);font-family:"Inter",system-ui,Arial,sans-serif}
 
 /* HEADER */
 .header{
@@ -30,7 +31,7 @@ html,body,#root{height:100%;margin:0;background:var(--page-bg);color:var(--text-
   margin:0 auto;
 }
 .church-logo{
-  width:64px;           /* small fixed logo on all devices */
+  width:64px;
   height:64px;
   object-fit:cover;
   border-radius:10px;
@@ -44,27 +45,37 @@ html,body,#root{height:100%;margin:0;background:var(--page-bg);color:var(--text-
 }
 .tagline{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* TOP NAV (mobile first) */
+/* TOP NAV - mobile-friendly and wraps */
 .top-nav-row{background:transparent;border-bottom:1px solid var(--border)}
 .top-nav{
   display:flex;
-  gap:12px;
-  padding:12px 12px;
-  overflow:auto;
+  gap:10px;
+  padding:10px 12px;
   max-width:1200px;
   margin:0 auto;
+  flex-wrap:wrap;               /* allow wrapping to multiple rows on narrow screens */
+  align-items:center;
+  justify-content:flex-start;
 }
+
+/* Each tab */
 .top-tab{
   white-space:nowrap;
-  flex:0 0 auto;
-  padding:10px 16px;
+  flex:0 1 auto;                /* allow some shrink/grow */
+  padding:8px 14px;
   border-radius:999px;
-  border:1px solid #f0f2f5;
-  background:#fafafa;
-  font-weight:600;
+  border:1px solid #eef3f8;
+  background:#fbfdff;           /* visible even when not active */
+  font-weight:700;
   cursor:pointer;
+  color:var(--text-color);
   box-shadow:none;
+  font-size:14px;
+  min-width:96px;               /* ensures buttons are tap-friendly */
+  text-align:center;
 }
+
+/* Active tab */
 .top-tab.active{
   background:var(--accent);
   color:#fff;
@@ -75,7 +86,7 @@ html,body,#root{height:100%;margin:0;background:var(--page-bg);color:var(--text-
 /* MAIN CONTENT */
 .main-content{
   max-width:1200px;
-  margin:20px auto;
+  margin:18px auto;
   padding:12px;
 }
 
@@ -83,7 +94,10 @@ html,body,#root{height:100%;margin:0;background:var(--page-bg);color:var(--text-
 h2{font-size:28px;margin:8px 0 6px}
 .muted{color:var(--muted);margin-bottom:16px}
 
-/* Dashboard grid */
+/* Dashboard grid
+   - On desktop: show multiple fixed-size cards
+   - On small screens: two cards per row so they fit well
+*/
 .dashboard-grid{
   display:flex;
   gap:18px;
@@ -91,9 +105,11 @@ h2{font-size:28px;margin:8px 0 6px}
   align-items:flex-start;
   margin-top:8px;
 }
+
+/* default card (desktop) */
 .summary-card{
-  width:150px;
-  min-height:90px;
+  width:180px;
+  min-height:110px;
   border-radius:var(--card-radius);
   padding:12px;
   box-shadow:var(--card-shadow);
@@ -104,14 +120,14 @@ h2{font-size:28px;margin:8px 0 6px}
 .summary-card h3{margin:0 0 8px 0;font-size:15px}
 .summary-value{font-size:18px;font-weight:700;color:#0b3a2b}
 
-/* Pastels */
+/* Pastel backgrounds */
 .summary-card.members{background:var(--pastel-1)}
 .summary-card.offerings{background:var(--pastel-2)}
 .summary-card.tithes{background:var(--pastel-3)}
 .summary-card.expenses{background:var(--pastel-4)}
 .summary-card.balance{background:var(--pastel-5)}
 
-/* Forms */
+/* Forms and layout */
 .form-card{background:#fff;border-radius:12px;padding:14px;box-shadow:var(--card-shadow);border:1px solid var(--border);max-width:520px}
 label{display:block;margin-top:10px;font-weight:600}
 input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);margin-top:6px;font-size:14px}
@@ -120,7 +136,37 @@ textarea{min-height:80px}
 /* Buttons */
 .primary-btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;margin-top:12px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(37,99,235,0.14)}
 
-@media(min-width:900px){
+/* Responsive tweaks */
+
+/* Narrow phones: make summary cards smaller (two per row),
+   make top tabs comfortably sized and wrap to a second row if needed */
+@media (max-width:480px){
+  .header-left{padding:12px}
+  .church-logo{width:56px;height:56px}
+  h2{font-size:24px}
+
+  /* cards: two per row */
+  .summary-card{
+    width:calc(50% - 12px); /* two items per row with gap */
+    min-height:88px;
+    padding:10px;
+  }
+
+  /* ensure top tabs are large enough but can wrap */
+  .top-tab{min-width:84px;padding:8px 12px;font-size:13px}
+}
+
+/* Medium screens (phones/phablets) */
+@media (min-width:481px) and (max-width:899px){
+  .summary-card{
+    width:140px;
+    min-height:92px;
+  }
+  .top-tab{min-width:96px;padding:9px 14px}
+}
+
+/* Desktop */
+@media (min-width:900px){
   .header-left{padding:20px 28px}
   .top-nav{padding:14px 28px}
   .main-content{padding:20px 28px}
